@@ -14,7 +14,7 @@
 <!-- Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
-    <a href="homePage" class="w3-bar-item w3-button" style="font-family: 'Reenie Beanie', cursive;, cursive; color: white; margin-left: 240px; font-size: 40px">Bean There Pod That</a>
+    <a href="homePage" class="w3-bar-item w3-button" style="font-family: 'Reenie Beanie', cursive; color: white; margin-left: 240px; font-size: 40px">Bean There Pod That</a>
     <!-- Right-sided navbar links. Hide them on small screens -->
     <div class="w3-right w3-hide-small">
       <a href="homePage" class="w3-bar-item w3-button">About Us</a>
@@ -28,7 +28,7 @@
 <nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index:3;width:240px" id="mySidebar">
   <div class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
-    <img src="static/img/logoBTPTBrown.png" class="w3-round w3-image w3-opacity-min" style="margin-left:30px;" alt="Logo" width="140" height="160">
+    <img src="static/img/logoBTPTBrown.png" class="w3-round w3-image w3-opacity-min" style="margin-left:30px" alt="Logo" width="140" height="160">
   </div>
   <div class="w3-padding-64 w3-large w3-text-grey" style="letter-spacing: 5px">
     <a href="dashboard" class="w3-bar-item w3-button">Dashboard</a>
@@ -45,37 +45,18 @@
 </header>
 
 <!-- Page content -->
-<div class="w3-content" style="max-width:1500px">
-
-  <!-- About Section -->
-  <div class="w3-row w3-padding-64" id="about">
-    <div class="w3-col m6 w3-padding-large w3-hide-small">
-     <img src="static/img/img1.jpg" class="w3-round w3-image w3-opacity-min" style="margin-left:150px; margin-top: 35px" alt="Intro Pic" width="350" height="400">
-    </div>
-
-    <div class="w3-col m6 w3-padding-large" style="margin-top: 35px">
-      <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Bean There Pod That</h1>
-      <h4 class="w3-center">Coffee Time</h4>
-      <p class="w3-large" >Bean There Pod That  is an application developed to help coffee lovers to keep track of 
-      the coffees they have tasted. It is a community-powered platform for personalized recommendations to all 
-      coffee fanatics. 
-      The Bean There Pod That  will present the user with a database of all types of coffees available in the market. 
-      The users will be able to rate the coffee they tasted on a scale of one to five pods. 
-      The community dimension is what makes it a truly customer-centric platform. It allows users to rate the coffees 
-      and read other users' comments. </p>
-      <p class="w3-large" >Offering customized recommendations depending on their past behavior, the more 
-      ratings and reviews they leave on the app, the better their recommendations. Bean There Pod That seems to be the 
-      perfect conjunction big data, and machine learning assisting coffee lovers never to be disappointed ever again 
-      with their choices and open their horizons to different experiences and tastes. </p>
-
-    </div>
+    <!-- Login Section -->
+  <div class="w3-container w3-padding-64" id="login" style="margin-left: 240px; margin-top: 65px">
+    <h1 style="font-family: 'Reenie Beanie', cursive; font-size: 35px">Please, Login</h1>
+    <p>Please Login access all Bean There Pod That benefits.</p>
+    <p>If you need, send us a <a href="#contact">Message</a></p>
+    <form action="" method = "POST" >
+        <p><input class="w3-input w3-padding-16" type="text" id="email" name = "email" placeholder="Enter your e-mail address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title = "Please follow this format: example@example.com" required></p>
+        <p><input class="w3-input w3-padding-16" type="password" name = "password"  id="password" pattern=".{6,}" placeholder="Six or more characters" title = "Please place six or more characters"></p>
+      <p><button class="w3-button w3-light-grey w3-section" name="login" type="submit">LOGIN</button></p>
+    </form>
   </div>
-  
 
 <footer class="w3-center w3-light-grey w3-padding-32">
   <p><a href="https://www.BeanTherePodThat.ca" title="BeanTherePodThat" target="_blank" class="w3-hover-text-green">www.BeanTherePodThat.ca</a></p>
 </footer>
-
-</body>
-
-</html>
