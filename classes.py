@@ -9,7 +9,7 @@ class CreateUser(FlaskForm):
     password = TextField('Password',validators=[DataRequired()])
     create = SubmitField('Create')
     
-    #teste
+    
 
 # class DeleteTask(FlaskForm):
 #     key = TextField('Task ID')
