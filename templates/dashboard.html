@@ -34,7 +34,7 @@
     <a href="dashboard" class="w3-bar-item w3-button">Dashboard</a>
     <a href="login" class="w3-bar-item w3-button">Login</a>
     <a href="#" class="w3-bar-item w3-button">My Machines</a>
-    <a href="#" class="w3-bar-item w3-button">Add a Coffee</a>
+    <a href="addCoffee" class="w3-bar-item w3-button">Add a Coffee</a>
     <a href="#" class="w3-bar-item w3-button">My Profile</a>
   </div>
 </nav>
@@ -48,6 +48,36 @@
 <div class="w3-container w3-padding-64 w3-center" id="register" style="margin-left: 240px; margin-top: 65px">
       <h1  style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Welcome to Bean There Pod That</h1>
       <h1  style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">{{session['firstName']}} {{session['lastName']}}</h1> 
+      
+      
+         <script>
+         
+
+        $(document).ready(function() {
+            let loc = window.location.href
+        
+            let socket = io(loc);
+        
+            socket.on('notification', function(value){
+                $("#result").html(value)
+            });
+            
+            
+            $("#send_name").on('click', () => {
+                let name = $('#username').val() ; // this gets the username entered by the user
+                socket.emit('username',name) ;    // sends the username to the server
+            })
+            
+            $("#send_private").on('click', () => {
+                let to_name = $('#to').val() ; // this gets the name (receiver)
+                let msg = $('#msg').val() ; 
+                socket.emit('private_msg',{"to":to_name, "message": msg}) ;    // sends the username to the server
+            })
+            
+            
+        });
+     </script>
+    
 </div>
 
 

@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/first.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stars.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Kristi&family=Quicksand:wght@300&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
+
 
 
 <body>
@@ -45,17 +47,41 @@
 </header>
 
 <!-- Page content -->
-    <!-- Register Section -->
+    <!-- Register Machine Section -->
     <div class="w3-container w3-padding-64" id="register" style="margin-left: 240px; margin-top: 65px">
-      <h1  style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Please, Register Now</h1>
-      <p>Start to enjoy Bean There Pod That's benefits!</p>
+      <h1  style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">{{session['firstName']}} {{session['lastName']}}, Add a Coffee and give us your opinion.</h1>
+      <p>Rate a coffee from 1 to 5 star.</p>
+      </br>
       <form ACTION="" method = "POST" >
+        <p><input class="w3-input w3-padding-16" type="text" id="coffeeName" name = "coffeeName" placeholder="Coffee Name" title = "Coffee Name"required ></p>
         
-        <p><input class="w3-input w3-padding-16" type="text" id="firstName" name = "firstName" placeholder="First Name" pattern="[A-Za-z]{1,32}" title = "Please, only letter allowed until 32 characters"required ></p>
-        <p><input class="w3-input w3-padding-16" type="text" id="lastName" name = "lastName" placeholder="Last Name" pattern="[A-Za-z]{1,32}" title = "Please, only letter allowed until 32 characters"required></p>
-        <p><input class="w3-input w3-padding-16" type="text" id="email" name = "email" placeholder="Enter your e-mail address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title = "Please follow this format: example@example.com" required></p>
-        <p><input class="w3-input w3-padding-16" type="password" name = "password"  id="password" pattern=".{6,}" placeholder="Six or more characters" title = "Please place six or more characters"></p>
-        <p><button class = "w3-button w3-light-grey w3-section" id="create" name = "create" value = "send">SUBMIT</button></p>   
+        <div class="rate">
+          <input type="radio" id="star5" name="rate" value="5" />
+          <label for="star5" title="text">5 stars</label>
+          <input type="radio" id="star4" name="rate" value="4" />
+          <label for="star4" title="text">4 stars</label>
+          <input type="radio" id="star3" name="rate" value="3" />
+          <label for="star3" title="text">3 stars</label>
+          <input type="radio" id="star2" name="rate" value="2" />
+          <label for="star2" title="text">2 stars</label>
+          <input type="radio" id="star1" name="rate" value="1" />
+          <label for="star1" title="text">1 star</label>
+        </div>
+        
+        <p><textarea class="w3-input w3-padding-16" type="text" id="coffeeOpinion" name = "coffeeOpinion" placeholder="Give your opinion" rows="6" required></textarea></p>
+        <p><button class = "w3-button w3-light-grey w3-section" id="create" name = "create" value = "send">CREATE</button></p>   
+        
+        <!--{% with message = get_flashed_messages() %}-->
+        <!--  {% if message %}-->
+        <!--    {% for message in messages %}-->
+        <!--      <div class="alert alert-warning alert-dismissible" role="alert">-->
+        <!--        {{message}}-->
+        <!--      </div>-->
+        <!--    {% endfor %}-->
+        <!--  {% endif %}-->
+        <!--{% endwith %}-->
+        
+        
 	</form>
     </div>
 

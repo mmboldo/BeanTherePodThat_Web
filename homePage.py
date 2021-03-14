@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, url_for, session, redirect
+from flask import Flask, render_template, request, url_for, session, redirect, flash
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from classes import *
+from flask_socketio import SocketIO, emit
+from flask_pymongo import PyMongo
+from bson.json_util import dumps, loads 
 
 
 app = Flask(__name__)
@@ -10,6 +13,9 @@ app.config.update(dict(SECRET_KEY='yoursecretkey'))
 client = MongoClient('mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 # DB name
 db = client.BeanTherePodThat
+
+socketio = SocketIO(app)
+users = {}
 
 # this method is to open the homePage
 @app.route('/homePage')
@@ -67,6 +73,23 @@ def dashboard():
     
     # if not logged, user will be forward to login page 
     return render_template('login.html')
+
+
+# add a coffee is a page that the user needs to be logged
+@app.route('/addCoffee', methods=['GET', 'POST'])
+def addCoffee():  
+    # go to this page only if logged. 
+    if 'email' in session:
+        if request.method == 'POST':
+            # db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']})
+            if db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']}) is True:
+               toastr.info("Here's a message to briefly show to your user");
+        return render_template('addCoffee.html') 
+        
+
+    # if not logged, user will be forward to login page 
+    return render_template('login.html')
+
 
         
 # this method register a new user
