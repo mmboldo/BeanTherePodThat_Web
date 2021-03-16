@@ -81,6 +81,23 @@ th.book-table {
     width: 32%;
 }
 
+.element {
+  display: inline-block;
+  margin-top:20px; 
+  margin-left:20px; 
+  margin-right: 20px; 
+  margin-bottom:20px; 
+  background: #204d48; 
+  color:black; 
+  border-radius:15px 15px 15px 15px;
+  vertical-align:top;
+  width: 25%
+}
+
+.w3-padding-addCoffee{
+    padding-top:50px!important;
+    padding-bottom:50px!important; 
+    margin-top: 50px;}
 
 
 /* W3.CSS 4.13 June 2019 by Jan Egil and Borge Refsnes */
@@ -109,7 +126,7 @@ legend{color:inherit;display:table;max-width:100%;padding:0;white-space:normal}t
 [type=search]::-webkit-search-decoration{-webkit-appearance:none}
 ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}
 /* End extract */
-html,body{font-family: 'Quicksand', sans-serif;font-size:15px;line-height:1.5}html{overflow-x:hidden}
+html,body{font-family: 'Quicksand', sans-serif;font-size:20px;line-height:1.5}html{overflow-x:hidden}
 h1{font-size:36px}h2{font-size:30px}h3{font-size:24px}h4{font-size:20px}h5{font-size:18px}h6{font-size:16px}.w3-serif{font-family:serif}
 h1,h2,h3,h4,h5,h6{font-family: 'Quicksand', sans-serif;font-weight:400;margin:10px 0}.w3-wide{letter-spacing:4px}
 hr{border:0;border-top:1px solid #eee;margin:20px 0}

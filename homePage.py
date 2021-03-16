@@ -5,14 +5,20 @@ from classes import *
 from flask_socketio import SocketIO, emit
 from flask_pymongo import PyMongo
 from bson.json_util import dumps, loads 
+from datetime import datetime
+from datetime import timedelta
 
 
 app = Flask(__name__)
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
-client = MongoClient('mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority')
 # DB name
 db = client.BeanTherePodThat
+
+app.config["MONGO_URI"] = "mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
+
+mongo = PyMongo(app)
 
 socketio = SocketIO(app)
 users = {}
@@ -69,10 +75,19 @@ def registration():
 def dashboard():  
     # go to this page only if logged. 
     if 'email' in session:
-        return render_template('dashboard.html') 
+        
+        lastOpinions = mongo.db.coffees.find({}).sort('last_modified', -1).limit(-5)
+    
+        myLastOpinions= mongo.db.coffees.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
+        
+        
+        
+        
+        return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions) 
     
     # if not logged, user will be forward to login page 
     return render_template('login.html')
+
 
 
 # add a coffee is a page that the user needs to be logged
@@ -82,8 +97,8 @@ def addCoffee():
     if 'email' in session:
         if request.method == 'POST':
             # db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']})
-            if db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']}) is True:
-               toastr.info("Here's a message to briefly show to your user");
+            db.coffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'], 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now()}) 
+               
         return render_template('addCoffee.html') 
         
 
