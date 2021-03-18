@@ -8,8 +8,12 @@ from bson.json_util import dumps, loads
 from datetime import datetime
 from datetime import timedelta
 
-
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'someSecretKey123'
+app.config['DEBUG'] = True
+
+
+
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
 client = MongoClient('mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority')
@@ -22,6 +26,8 @@ mongo = PyMongo(app)
 
 socketio = SocketIO(app)
 users = {}
+
+
 
 # this method is to open the homePage
 @app.route('/homePage')
@@ -44,7 +50,7 @@ def login():
                 session['firstName'] = existing_user['firstName']
                 session['lastName'] = existing_user['lastName']
                 # after logged in the user will be forward to dashboard
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('init'))
                 
             return 'Invalid email and/or password'
     
@@ -76,17 +82,15 @@ def dashboard():
     # go to this page only if logged. 
     if 'email' in session:
         
-        lastOpinions = mongo.db.coffees.find({}).sort('last_modified', -1).limit(-5)
+        lastOpinions = mongo.db.coffees.find({}).sort('last_modified', 1).limit(5)
     
         myLastOpinions= mongo.db.coffees.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
-        
-        
-        
         
         return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions) 
     
     # if not logged, user will be forward to login page 
     return render_template('login.html')
+    
 
 
 
@@ -125,12 +129,49 @@ def registerMachines():
         return 'Machine already register'
         
     # the page template   
-    return render_template('registerMachines.html')        
+    return render_template('registerMachines.html')      
+    
 
+@app.route('/', methods=['GET', 'POST'])
+def init():                            # this is a comment. You can create your own function name
+# go to this page only if logged. 
+    if 'email' in session:
+        
+        lastOpinions = mongo.db.coffees.find({}).sort('last_modified', -1).limit(-5)
+    
+        myLastOpinions= mongo.db.coffees.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
+        
+        return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions) 
+    
+    # if not logged, user will be forward to login page 
+    return render_template('login.html')
+    
+    
+@socketio.on('username')
+def receive_username_from_client(data):
+    print(data) # this is just to verify/see the data received from the client
+    users[data] = request.sid ; # the session id is "saved"
+    send_broadcast_message('{} just registered '.format(data))
+  
+@socketio.on('messages')
+def receive_messages(msg):
+    send_broadcast_message('{} -- sent by someone'.format(msg))
+    
+@socketio.on('private_msg')
+def receive_private_from_client(data):
+    print(data) # the data was sent in json format
+    person = data['to']
+    message = data['message']
+    if person in users.keys():
+        emit('notification', message, room = users[person]) # the session id is used as individual "room"
+    else: 
+        emit('notification', '{} does not exists'.format(person))
+
+
+# this would send a message to ALL clients
+def send_broadcast_message(msg):
+    emit('notification', msg, broadcast=True)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True) 
-    
-
-
+    socketio.run(app,host = '0.0.0.0' ,debug=True)  # here, we are using socketio instaead of app because it has more features

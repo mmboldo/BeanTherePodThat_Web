@@ -8,15 +8,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 
 <body>
 
-<!-- Navbar (sit on top) -->
+ <!--Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
     <a href="homePage" class="w3-bar-item w3-button" style="font-family: 'Reenie Beanie', cursive; color: white; margin-left: 240px; font-size: 40px">Bean There Pod That</a>
-    <!-- Right-sided navbar links. Hide them on small screens -->
+     <!--Right-sided navbar links. Hide them on small screens -->
     <div class="w3-right w3-hide-small">
       <a href="homePage" class="w3-bar-item w3-button">About Us</a>
       <a href="registration" class="w3-bar-item w3-button">Register</a>
@@ -25,7 +27,7 @@
   </div>
 </div>
 
-<!-- Sidebar/menu -->
+ <!--Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index:3;width:240px" id="mySidebar">
   <div class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
@@ -40,12 +42,12 @@
   </div>
 </nav>
 
-<!-- Header -->
+ <!--Header -->
 <header class="w3-display-container w3-content w3-wide w3-opacity-min" style="max-width:1600px;min-width:500px" id="home">
   
 </header>
 
-<!-- Page content -->
+ <!--Page content -->
 <div class="w3-container w3-padding-addCoffee w3-center" id="register" style="margin-left: 180px; margin-top: 65px; vertical-align:top;">
       <h1 style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Welcome {{session['firstName']}} to Bean There Pod That</h1>
       
@@ -119,19 +121,52 @@
             <p style="text-align: right; font-size:15px"> {{ myLastOpinion['firstName'] }} </p>
           </div>  
         {%endfor%} 
+        </div>
         
-        </div>
-          <div class="element" style="background:#45230f">
-            <p style="text-align:center; color:white">Your messages</p> 
-              <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #f9fcfc; color:black; border-radius:15px 15px 15px 15px; height: 200px ">
-                <p style="font-weight: bold; font-size:15px"> Test Test </p>
-              </div>
-              <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #b3723b; color:black; border-radius:15px 15px 15px 15px; ">
-                <p><input class="w3-input w3-padding" style="font-size:15px" type="text" id="to" placeholder="To"></p>
-                <p><textarea class="w3-input w3-padding" style="font-size:15px" type="text" rows="3" id="msg" placeholder="Message"></textarea></p>
-                <p><button class="w3-button w3-light-grey" style="font-size:15px" id="send_private">Send</button></p>
-              </div>
-        </div>
+
+    <script>
+         
+
+        $(document).ready(function() {
+            let loc = window.location.href
+        
+            let socket = io(loc);
+        
+            socket.on('notification', function(value){
+                $("#result").html(value)
+            });
+            
+            
+            $("#send_name").on('click', () => {
+                let name = $('#username').val() ; // this gets the username entered by the user
+                socket.emit('username',name) ;    // sends the username to the server
+            })
+            
+            $("#send_private").on('click', () => {
+                let to_name = $('#to').val() ; // this gets the name (receiver)
+                let msg = $('#msg').val() ; 
+                socket.emit('private_msg',{"to":to_name, "message": msg}) ;    // sends the username to the server
+            })
+            
+            
+        });
+     </script>
+    
+
+        
+  </head>
+  <div class="element" style="background:#45230f">
+      <p><input type="text" id="username" placeholder="enter username you want" style="width:200px" > </p>
+      <p><button id="send_name"> Submit name</button></p>
+      <p><input type="text" id="to" placeholder="sending to ?"></p>
+      <p><input type="text" id="msg" placeholder="what's the message"></p>
+      <button id="send_private">Send</button>
+      <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #b3723b; color:black; border-radius:15px 15px 15px 15px; ">
+        <textarea class="w3-input w3-padding" style="font-size:15px; background-color: #b3723b;" type="text" rows="3" id="result" placeholder="Message"></textarea>
+      </div>
+  </div>
+      
+
    
 </div>
         
