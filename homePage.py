@@ -76,23 +76,6 @@ def registration():
     # the page template   
     return render_template('registration.html')
     
-# when the user is logged, it will be directed to the dashboard page
-@app.route('/dashboard', methods=['GET', 'POST'])
-def dashboard():  
-    # go to this page only if logged. 
-    if 'email' in session:
-        
-        lastOpinions = mongo.db.coffees.find({}).sort('last_modified', 1).limit(5)
-    
-        myLastOpinions= mongo.db.coffees.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
-        
-        return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions) 
-    
-    # if not logged, user will be forward to login page 
-    return render_template('login.html')
-    
-
-
 
 # add a coffee is a page that the user needs to be logged
 @app.route('/addCoffee', methods=['GET', 'POST'])
