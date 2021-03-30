@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Bean There Pod That - Edit Profile{% endblock %}
+{% block page_content %}
+<!-- Page content -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- About Section -->
+    <div class="w3-row w3-padding-64" id="about">
+      <div class="w3-col m6 w3-padding-large w3-hide-small">
+       <img src="{{ url_for('file', filename=profile['profile_image_name'])}}" class="w3-round w3-image w3-opacity-min" style="margin-left:150px; margin-top: 35px" alt="Intro Pic" width="350" height="400">
+       <!-- Profile Image -->
+       <form method="POST" action="{{url_for('profile.upload') }}" enctype="multipart/form-data">
+       <input type="file" name="profile_image">
+       <input type="submit" value="Upload">
+       </form>
+      </div>
+
+      <form method="post">
+        <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">
+          <label for="username">Username</label>
+          <input name="username" id="username"
+          value="{{profile['username'] }}" required>
+        </h1>
+        <p>
+        <label for="firstname">First Name</label>
+        <input name="firstname" id="firstname"
+        value="{{profile['firstname'] }}" required>
+        </p>
+        <p>
+        <label for="lastname">Last Name</label>
+        <input name="lastname" id="lastname"
+        value="{{profile['lastname'] }}" required>
+        </p>
+        <p>
+        <label for="machine">Machine Model</label>
+        <input name="machine" id="machine"
+        value="{{profile['machine'] }}" required>
+        </p>
+        <p>
+        <label for="email">Email Address</label>
+        <input name="email" id="email"
+        value="{{profile['email'] }}" required>
+        </p>
+        <p>
+        <label for="occupation">Occupation</label>
+        <input name="occupation" id="occupation"
+        value="{{profile['occupation'] }}" required>
+        </p>
+        <p>
+        <label for="birthday">Birthday</label>
+        <input name="birthday" id="birthday" type="date"
+        value="{{profile['birthday'].strftime('%Y-%m-%d') }}" required>
+        </p>
+        <p class="w3-center">
+           <input class="w3-button w3-light-grey w3-section w3-center" name="editProfile" type="submit" value="Save"/>
+        </p>
+       
+      </form>
+  
+      
+      
+      
+    
+    </div>
+{% endblock%}

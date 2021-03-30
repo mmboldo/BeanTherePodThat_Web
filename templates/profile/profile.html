@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Bean There Pod That - Display Profile{% endblock %}
+{% block page_content %}
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- About Section -->
+    <div class="w3-row w3-padding-64" id="about">
+      <div class="w3-col m6 w3-padding-large w3-hide-small">
+       <img src="{{ url_for('file', filename=profile['profile_image_name'])}}" class="w3-round w3-image w3-opacity-min" style="margin-left:150px; margin-top: 35px" alt="Intro Pic" width="350" height="400">
+      </div>
+  
+      <div class="w3-col m6 w3-padding-large" style="margin-top: 35px">
+        <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">{{ profile['username'] }}</h1>
+        <p>First Name:      <b>{{ profile['firstname'] }}</b></p>
+        <p>Last Name:       <b>{{ profile['lastname'] }}</b></p>
+        <p>Machine Model:   <b>{{ profile['machine'] }}</b></p>
+        <p>Email Address:   <b>{{ profile['email'] }}</b></p>
+        <p>Occupation:      <b>{{ profile['occupation']}}</b></p>
+        <p>Birthday:        <b>{{ profile['birthday'].strftime('%Y-%m-%d') }}</b></p>
+        
+      </div>
+      
+      <p class="w3-center"><a href="edit-profile"  class="w3-button w3-light-grey w3-section" name="editProfile" type="submit">EDIT</a></p>
+    
+    </div>
+{% endblock%}
