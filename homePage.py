@@ -11,6 +11,10 @@ from datetime import timedelta
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'someSecretKey123'
 app.config['DEBUG'] = True
+# image configuration
+app.config['SECRET_KEY'] = 'someSecretKey123'
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
+app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 
 
@@ -154,6 +158,14 @@ def receive_private_from_client(data):
 # this would send a message to ALL clients
 def send_broadcast_message(msg):
     emit('notification', msg, broadcast=True)
+
+# profile
+from . import profile
+app.register_blueprint(profile.bp)
+
+@app.route('/file/<filename>')
+def file(filename):
+    return mongo.send_file(filename)
 
 
 if __name__ == '__main__':
