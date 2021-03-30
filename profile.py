@@ -1,4 +1,5 @@
-from flask import Flask, render_template, flash, request, redirect, url_for, Blueprint, current_app
+import functools
+from flask import Flask, render_template, flash, request, redirect, url_for, Blueprint, current_app, session
 from werkzeug.utils import secure_filename
 from flask_pymongo import PyMongo
 from datetime import datetime, timezone
@@ -16,6 +17,7 @@ from bson import json_util
 # db = mongo["BeanTherePodThat"]
 db = mongo.db
 bp = Blueprint('profile', __name__, url_prefix='/profile')
+collection = mongo
 
 # @app.route('/user/<username>')
 # def profile():
@@ -41,7 +43,7 @@ def display_profile():
         #     update_profile(request)
         #     mongo.db.profile.update_one(current_email,)
         #     return
-    email = "travistest@gmail.com"
+    email = "wuc@gmail.com"#session.get('email')
     profile = db.profile.find_one({"email": email})
     if profile == None:
        init_profile(email)
@@ -51,7 +53,7 @@ def display_profile():
     
 @bp.route("/edit-profile", methods=['GET', 'POST'])
 def edit_profile():
-    email = "travistest@gmail.com"
+    email = "wuc@gmail.com"#session.get('email')
     profile = db.profile.find_one({"email": email})
     
 
@@ -84,7 +86,8 @@ def edit_profile():
 # profile image
 @bp.route('/upload-profile', methods=['POST'])
 def upload():
-    profile = db.profile.find_one({"email": "travistest@gmail.com"})
+    email = "wuc@gmail.com"#session.get('email')
+    profile = db.profile.find_one({"email": email})
     error = None
     if 'profile_image' in request.files:
         # if "filesize" in request.cookies:
@@ -98,7 +101,7 @@ def upload():
             
         if error is None:
             filename = secure_filename(profile_image.filename)
-            mongo.save_file(profile_image.filename, profile_image)
+            collection.save_file(profile_image.filename, profile_image)
             #updatge database
             db.profile.update_one({
                 'email': profile['email']
