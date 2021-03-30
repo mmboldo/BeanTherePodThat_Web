@@ -8,6 +8,7 @@ from bson.json_util import dumps, loads
 from datetime import datetime
 from datetime import timedelta
 from random import sample
+from extentsions import mongo
 
 
 app = Flask(__name__)
@@ -28,7 +29,8 @@ db = client.BeanTherePodThat
 
 app.config["MONGO_URI"] = "mongodb+srv://myadmin:myadmin@cluster0.5nwxg.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
 
-mongo = PyMongo(app)
+#mongo = PyMongo(app)
+mongo = mongo.init_app(app)
 
 socketio = SocketIO(app)
 users = {}

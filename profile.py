@@ -2,8 +2,7 @@ from flask import Flask, render_template, flash, request, redirect, url_for, Blu
 from werkzeug.utils import secure_filename
 from flask_pymongo import PyMongo
 from datetime import datetime, timezone
-from database import DB
-from tempDB import mongo
+from extentsions import mongo
 from bson import json_util
 # app = Flask(__name__)
 # app.config["MONGO_URI"] = "mongodb+srv://admin:admin@cluster0.zhcnd.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority" # replace the URI with your own connection
