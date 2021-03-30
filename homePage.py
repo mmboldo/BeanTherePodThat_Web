@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, redirect, flash, jsonify
+from flask import Flask, render_template, request, url_for, session, redirect, flash, jsonify, Blueprint
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from classes import *
@@ -8,6 +8,7 @@ from bson.json_util import dumps, loads
 from datetime import datetime
 from datetime import timedelta
 from random import sample
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'someSecretKey123'
@@ -189,7 +190,7 @@ def send_broadcast_message(msg):
     emit('notification', msg, broadcast=True)
 
 # profile
-from . import profile
+import profile
 app.register_blueprint(profile.bp)
 
 @app.route('/file/<filename>')
