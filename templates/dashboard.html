@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 
 
 <body>
@@ -33,12 +36,12 @@
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
     <img src="static/img/logoBTPTBrown.png" class="w3-round w3-image w3-opacity-min" style="margin-left:30px" alt="Logo" width="140" height="160">
   </div>
-  <div class="w3-padding-64 w3-large w3-text-grey" style="letter-spacing: 5px">
+  <div class="w3-large w3-text-grey" style="letter-spacing: 5px; margin-left:20px">
     <a href="/" class="w3-bar-item w3-button">Dashboard</a>
-    <a href="login" class="w3-bar-item w3-button">Login</a>
     <a href="#" class="w3-bar-item w3-button">My Machines</a>
     <a href="addCoffee" class="w3-bar-item w3-button">Add a Coffee</a>
     <a href="#" class="w3-bar-item w3-button">My Profile</a>
+    <a href="logout" class="w3-bar-item w3-button">Logout</a>
   </div>
 </nav>
 
@@ -47,10 +50,53 @@
   
 </header>
 
+
  <!--Page content -->
 <div class="w3-container w3-padding-addCoffee w3-center" id="register" style="margin-left: 180px; margin-top: 65px; vertical-align:top;">
       <h1 style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Welcome {{session['firstName']}} to Bean There Pod That</h1>
       
+              
+        <div class="element" style="background:#b4c9cf">
+          <p style="text-align:center">Bean There Pod That have some recommendations for you. </p> 
+          <p style="text-align:center">Here are the top best rated coffees. </p> 
+          
+          {% for bestRatedCoffee in bestRatedCoffees %} 
+           
+              <p style="font-weight: bold; font-family: 'Reenie Beanie', cursive; font-size: 28px">{{bestRatedCoffee}}</p>
+           
+          {% endfor %}
+        </div>
+ 
+        <div class="ct-chart element" style="width:500px; height: 300px; background:#b4c9cf">
+          
+          <script>
+          
+            var getData1 = $.get('/data1')
+
+            getData1.done(function(results) {
+              var data = {
+                // A labels array that can contain any sort of values
+                labels: [ 'Voluto', 'Venezia', 'Rome', 'Vanila', 'Shanghai'],
+                // Our series array that contains series objects or in this case series data arrays
+                series: [results.results]
+              };
+                
+         
+              var options = {
+                width: 500,
+                height: 300
+              }
+              // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object.
+              new Chartist.Bar('.ct-chart', data, options);
+            });
+            
+          </script>
+
+        </div>
+
+        <p></p>
         <div class="element">
           <p style="text-align:center; color:white">Check it out the most</br>recently opinions that other </p> 
           {% for lastOpinion in lastOpinions %} 
@@ -124,47 +170,49 @@
         </div>
         
 
-    <script>
+ <script>
          
 
-        $(document).ready(function() {
-            let loc = window.location.href
+  //       $(document).ready(function() {
+  //           let loc = window.location.href
         
-            let socket = io(loc);
+  //           let socket = io(loc);
         
-            socket.on('notification', function(value){
-                $("#result").html(value)
-            });
+  //           socket.on('notification', function(value){
+  //               $("#result").html(value)
+  //           });
             
             
-            $("#send_name").on('click', () => {
-                let name = $('#username').val() ; // this gets the username entered by the user
-                socket.emit('username',name) ;    // sends the username to the server
-            })
+  //           // $("#send_name").on('click', () => {
+  //           //     let name = $('#username').val() ; // this gets the username entered by the user
+  //           //     socket.emit('username',name) ;    // sends the username to the server
+  //           // })
+  //           let name = $('#username').val() ; // this gets the username entered by the user
+  //           socket.emit('username',name) ; 
             
-            $("#send_private").on('click', () => {
-                let to_name = $('#to').val() ; // this gets the name (receiver)
-                let msg = $('#msg').val() ; 
-                socket.emit('private_msg',{"to":to_name, "message": msg}) ;    // sends the username to the server
-            })
-            username = session['email'];
+  //           $("#send_private").on('click', () => {
+  //               // let name = $('#username').val() ; // this gets the username entered by the user
+  //               // socket.emit('username',name) ;    // sends the username to the server
+  //               let to_name = $('#to').val() ; // this gets the name (receiver)
+  //               let msg = $('#msg').val() ; 
+  //               socket.emit('private_msg',{"to":to_name, "message": msg}) ;    // sends the username to the server
+  //           })
+  //           username = session['email'];
             
-        });
-     </script>
+  //       });
+  //   </script>
     
 
         
-  </head>
-  <div class="element" style="background:#45230f">
-      <p><input type="text" id="username" placeholder="enter username you want" style="width:200px" > </p>
-      <p><button id="send_name"> Submit name</button></p>
-      <p><input type="text" id="to" placeholder="sending to ?"></p>
-      <p><input type="text" id="msg" placeholder="what's the message"></p>
-      <button id="send_private">Send</button>
-      <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #b3723b; color:black; border-radius:15px 15px 15px 15px; ">
-        <textarea class="w3-input w3-padding" style="font-size:15px; background-color: #b3723b;" type="text" rows="3" id="result" placeholder="Message"></textarea>
-      </div>
-  </div>
+  <!--// </head>-->
+  <!--// <div class="element" style="background:#45230f">-->
+  <!--//     <p><input class="w3-input" style="width:200px; margin: 0 auto" type="text" id="to" placeholder="sending to ?"></p>-->
+  <!--//     <p><input class="w3-input" style="width:200px; margin: 0 auto"  type="text" id="msg" placeholder="what's the message"></p>-->
+  <!--//     <button class="w3-button   w3-aqua"id="send_private">Send</button>-->
+  <!--//     <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #b3723b; color:black; border-radius:15px 15px 15px 15px; ">-->
+  <!--//       <textarea class="w3-input w3-padding" style="font-size:15px; background-color: #b3723b;" type="text" rows="3" id="result" placeholder="Message"></textarea>-->
+  <!--//     </div>-->
+  <!--// </div>-->
       
 
    
@@ -173,7 +221,7 @@
     
 </div>
 
-<footer class="w3-center w3-light-grey w3-padding-32">
+<footer class="w3-center w3-light-grey w3-padding-32" style="margin-left: 240px;">
   <p><a href="https://www.BeanTherePodThat.ca" title="BeanTherePodThat" target="_blank" class="w3-hover-text-green">www.BeanTherePodThat.ca</a></p>
 </footer>
 
