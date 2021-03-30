@@ -43,7 +43,7 @@ def display_profile():
         #     update_profile(request)
         #     mongo.db.profile.update_one(current_email,)
         #     return
-    email = "wuc@gmail.com"#session.get('email')
+    email = session.get('email')
     profile = db.profile.find_one({"email": email})
     if profile == None:
        init_profile(email)
@@ -53,7 +53,7 @@ def display_profile():
     
 @bp.route("/edit-profile", methods=['GET', 'POST'])
 def edit_profile():
-    email = "wuc@gmail.com"#session.get('email')
+    email = session.get('email')#"wuc@gmail.com"
     profile = db.profile.find_one({"email": email})
     
 
@@ -86,7 +86,7 @@ def edit_profile():
 # profile image
 @bp.route('/upload-profile', methods=['POST'])
 def upload():
-    email = "wuc@gmail.com"#session.get('email')
+    email = session.get('email')#"wuc@gmail.com"
     profile = db.profile.find_one({"email": email})
     error = None
     if 'profile_image' in request.files:
