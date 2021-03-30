@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, redirect, flash, jsonify
+from flask import Flask, render_template, request, url_for, session, redirect, flash
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from classes import *
@@ -7,15 +7,10 @@ from flask_pymongo import PyMongo
 from bson.json_util import dumps, loads 
 from datetime import datetime
 from datetime import timedelta
-from random import sample
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'someSecretKey123'
 app.config['DEBUG'] = True
-# image configuration
-app.config['SECRET_KEY'] = 'someSecretKey123'
-app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
-app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 
 
@@ -141,25 +136,13 @@ def init():                            # this is a comment. You can create your 
     
         myLastOpinions= mongo.db.coffees.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
         
-        bestRatedCoffees = mongo.db.coffees.distinct( "coffeeName" , { "rate" : "5" } );
-
-        graphCoffeeNames = mongo.db.coffees.distinct("coffeeName");
-        # bestRatedCoffees = mongo.db.coffees.find({'rate': '5'}).sort('coffeeName', -1)
+        las
         
-        return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions, bestRatedCoffees=bestRatedCoffees, len=len(graphCoffeeNames), graphCoffeeNames=graphCoffeeNames) 
+        return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions) 
     
     # if not logged, user will be forward to login page 
     return redirect(url_for('login'))
     
-@app.route('/data1')
-def data1():
-    
-    return jsonify({'results' : sample(range(1,10), 5)})
-#     #  mongo.db.coffees.find("coffeeName").count()}
-
-@app.route('/data')
-def data():
-    return jsonify({'coffeeNames' :mongo.db.coffees.distinct( "coffeeName" )})
     
 @socketio.on('username')
 def receive_username_from_client(data):
@@ -187,14 +170,6 @@ def receive_private_from_client(data):
 # this would send a message to ALL clients
 def send_broadcast_message(msg):
     emit('notification', msg, broadcast=True)
-
-# profile
-from . import profile
-app.register_blueprint(profile.bp)
-
-@app.route('/file/<filename>')
-def file(filename):
-    return mongo.send_file(filename)
 
 
 if __name__ == '__main__':
