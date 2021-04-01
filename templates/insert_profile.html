@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Bean There Pod That - Edit Profile{% endblock %}
+{% block page_content %}
+<!-- Page content -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- About Section -->
+    <div class="w3-row w3-padding-64" id="about">
+        <div class="w3-col m6 w3-padding-large w3-hide-small">
+            <img src="{{ url_for('static', filename='image/img1.jpg')}}" class="w3-round w3-image w3-opacity-min"
+                style="margin-left:150px; margin-top: 35px" alt="Intro Pic" width="350" height="400">
+        </div>
+        <form method="POST">
+            <div class="w3-col m6 w3-padding-large" style="margin-top: 35px">
+
+
+
+                <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;"><input
+                        name="username" id="username"></h1>
+                <p><label for="firstname">First Name</label>
+                    <input name="firstname" id="firstname">
+                </p>
+                <p><label for="lastname">Last Name</label>
+                    <input name="lastname" id="lastname">
+                </p>
+                <p><label for="machine">Machine Model</label>
+                    <input name="machine" id="machine">
+                </p>
+                <p><label for="email">Email Address</label>
+                    <input name="email" id="email" required>
+                </p>
+                <p><label for="occupation">Occupation</label>
+                    <input name="occupation" id="occupation">
+                </p>
+                <p><label for="birthday">Birthday</label>
+                    <input name="birthday" type="date" id="birthday">
+                </p>
+
+
+            </div>
+
+            <p class="w3-center"><button class="w3-button w3-light-grey w3-section" name="editProfile"
+                    type="submit">INSERT</button></p>
+        </form>
+    </div>
+    {% endblock%}

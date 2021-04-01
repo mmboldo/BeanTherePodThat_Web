@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, redirect, flash, jsonify
+from flask import Flask, render_template, request, url_for, session, redirect, flash, jsonify, Blueprint
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from classes import *
@@ -8,10 +8,16 @@ from bson.json_util import dumps, loads
 from datetime import datetime
 from datetime import timedelta
 from random import sample
+from extentsions import mongo
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'someSecretKey123'
 app.config['DEBUG'] = True
+# image configuration
+app.config['SECRET_KEY'] = 'someSecretKey123'
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
+app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 # mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
@@ -23,7 +29,8 @@ db = client.myFirstDatabase
 
 app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-mongo = PyMongo(app)
+# mongo = PyMongo(app)
+mongo.init_app(app)
 
 socketio = SocketIO(app)
 users = {}
@@ -323,6 +330,14 @@ def android_register():
         print(collection)
         print('Here is the collection')
         return 'Get Coffees'
+
+# profile
+import profile
+app.register_blueprint(profile.bp)
+
+@app.route('/file/<filename>')
+def file(filename):
+    return mongo.send_file(filename)
 
 
 if __name__ == '__main__':
