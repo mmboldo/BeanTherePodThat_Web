@@ -37,9 +37,10 @@
     <img src="static/img/logoBTPTBrown.png" class="w3-round w3-image w3-opacity-min" style="margin-left:30px" alt="Logo" width="140" height="160">
   </div>
   <div class="w3-large w3-text-grey" style="letter-spacing: 5px; margin-left:20px">
-    <a href="/" class="w3-bar-item w3-button">Dashboard</a>
+    <a href="dashboard" class="w3-bar-item w3-button">Dashboard</a>
+    <a href="coffeePods" class="w3-bar-item w3-button">Coffee Pods</a>
     <a href="#" class="w3-bar-item w3-button">My Machines</a>
-    <a href="addCoffee" class="w3-bar-item w3-button">Add a Coffee</a>
+    <a href="addCoffee" class="w3-bar-item w3-button">Comment a Coffee</a>
     <a href="#" class="w3-bar-item w3-button">My Profile</a>
     <a href="logout" class="w3-bar-item w3-button">Logout</a>
   </div>
@@ -55,11 +56,19 @@
 <div class="w3-container w3-padding-addCoffee w3-center" id="register" style="margin-left: 180px; margin-top: 65px; vertical-align:top;">
       <h1 style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Welcome {{session['firstName']}} to Bean There Pod That</h1>
       
+        <div class="element" style="background:#f1e1d4">
+          <p style="text-align:center">Here is the list of your coffee pods </p> 
+         
+          {% for myCoffee in myCoffees %} 
+             <div class="element" style="background:#b4c9cf;padding-right:5px;padding-left:5px; width:150px">
+              <h5>{{myCoffee['coffeeName']}} </br> {{myCoffee['brand']}}</h5>
+             </div>
+          {% endfor %}
+        </div>
               
         <div class="element" style="background:#b4c9cf">
           <p style="text-align:center">Bean There Pod That have some recommendations for you. </p> 
-          <p style="text-align:center">Here are the top best rated coffees. </p> 
-          
+         
           {% for bestRatedCoffee in bestRatedCoffees %} 
            
               <p style="font-weight: bold; font-family: 'Reenie Beanie', cursive; font-size: 28px">{{bestRatedCoffee}}</p>
@@ -67,30 +76,28 @@
           {% endfor %}
         </div>
  
-        <div class="ct-chart element" style="width:500px; height: 300px; background:#b4c9cf">
+        <div class="ct-chart element" style="width:500px; height: 315px; background:#cfebe8">
           
+          <p>Comments per Coffee</p>
           <script>
           
-            var getData1 = $.get('/data1')
-
-            getData1.done(function(results) {
               var data = {
                 // A labels array that can contain any sort of values
-                labels: [ 'Voluto', 'Venezia', 'Rome', 'Vanila', 'Shanghai'],
+                labels: [ 'Ethiopia', 'Melozio', 'Altissio', 'Alto Dolce', 'Livanto'],
                 // Our series array that contains series objects or in this case series data arrays
-                series: [results.results]
+                series: [['{{ethiopiaCounts}}', '{{melozioCounts}}', '{{altissioCounts}}', '{{altodolceCounts}}', '{{livantoCounts}}']]
               };
                 
          
               var options = {
                 width: 500,
-                height: 300
+                height: 240
               }
               // Create a new line chart object where as first parameter we pass in a selector
             // that is resolving to our chart container element. The Second parameter
             // is the actual data object.
               new Chartist.Bar('.ct-chart', data, options);
-            });
+
             
           </script>
 

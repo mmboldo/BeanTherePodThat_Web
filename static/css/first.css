@@ -93,6 +93,31 @@ th.book-table {
   vertical-align:top;
   width: 25%
 }
+.element1 {
+  display: inline-block;
+  margin-top:20px; 
+  margin-left:20px; 
+  margin-right: 20px; 
+  margin-bottom:20px; 
+  background: #b3723b; 
+  color:black; 
+  border-radius:15px 15px 15px 15px;
+  vertical-align:top;
+  width: 60%
+}
+.element2 {
+  display: inline-block;
+  margin-top:20px; 
+  margin-left:20px; 
+  margin-right: 20px; 
+  margin-bottom:20px; 
+  background: #b3723b; 
+  color:black; 
+  border-radius:15px 15px 15px 15px;
+  vertical-align:top;
+  width: 100%
+}
+
 
 .w3-padding-addCoffee{
     padding-top:50px!important;
@@ -108,6 +133,8 @@ th.book-table {
   /* outline width */
   stroke-width: 4px;
 }
+
+
 
 /* W3.CSS 4.13 June 2019 by Jan Egil and Borge Refsnes */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}

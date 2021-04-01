@@ -33,9 +33,10 @@
     <img src="static/img/logoBTPTBrown.png" class="w3-round w3-image w3-opacity-min" style="margin-left:30px" alt="Logo" width="140" height="160">
   </div>
   <div class="w3-large w3-text-grey" style="letter-spacing: 5px; margin-left:20px">
-    <a href="/" class="w3-bar-item w3-button">Dashboard</a>
+    <a href="dashboard" class="w3-bar-item w3-button">Dashboard</a>
+    <a href="coffeePods" class="w3-bar-item w3-button">Coffee Pods</a>
     <a href="#" class="w3-bar-item w3-button">My Machines</a>
-    <a href="addCoffee" class="w3-bar-item w3-button">Add a Coffee</a>
+    <a href="addCoffee" class="w3-bar-item w3-button">Comment a Coffee</a>
     <a href="#" class="w3-bar-item w3-button">My Profile</a>
     <a href="logout" class="w3-bar-item w3-button">Logout</a>
   </div>
@@ -53,7 +54,12 @@
       <p>Rate a coffee from 1 to 5 star.</p>
       </br>
       <form ACTION="" method = "POST" >
-        <p><input class="w3-input w3-padding-16" type="text" id="coffeeName" name = "coffeeName" placeholder="Coffee Name" title = "Coffee Name"required ></p>
+        <p><select  class="w3-input w3-padding-16" name="coffeeName" id="coffeeName">
+          {% for coffee in coffees %}
+            <option id="coffeeName" name="coffeeName" value="{{coffee['coffeeName']}}" selected="selected">{{coffee['coffeeName']}}</option>
+          {% endfor %}
+          </select></p>
+        <!--<p><input class="w3-input w3-padding-16" type="text" id="coffeeName" name = "coffeeName" placeholder="Coffee Name" title = "Coffee Name"required ></p>-->
         
         <div class="rate">
           <input type="radio" id="star5" name="rate" value="5" />
