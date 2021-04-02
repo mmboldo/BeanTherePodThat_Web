@@ -145,7 +145,7 @@
           {% for myLastOpinion in myLastOpinions %} 
           <div class="w3-container" style="margin-top:20px; margin-left:20px; margin-right: 20px; margin-bottom:20px; background-color: #b3723b; color:black; border-radius:15px 15px 15px 15px; ">
             <p style="font-weight: bold; font-size:15px"> {{ myLastOpinion['coffeeName'] }} </p>
-            <p style="text-align: center; font-size:15px">{{ myLastOpinion['coffeeOpinion'] }}" </p>
+            <p style="text-align: center; font-size:15px">"{{ myLastOpinion['coffeeOpinion'] }}" </p>
             {% if myLastOpinion['rate'] == "5" %}
               <span class="fa fa-star checked" style="color:orange; font-size:15px"></span>
               <span class="fa fa-star checked" style="color:orange; font-size:15px"></span>
