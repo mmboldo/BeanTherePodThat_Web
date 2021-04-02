@@ -231,7 +231,7 @@ def index():
     if 'useremail' in session:
         return 'You are logged in as ' + session['useremail']
         
-    return render_template('login.html')
+    return redirect(url_for('login'))
  
 #
 # This part serves as Android auth
