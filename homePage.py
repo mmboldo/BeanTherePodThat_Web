@@ -23,11 +23,11 @@ app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
-client = MongoClient('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority')
 # DB name
-db = client.myFirstDatabase
+db = client.BeanTherePodThat
 
-app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
 
 # mongo = PyMongo(app)
 mongo.init_app(app)
@@ -106,7 +106,7 @@ def registration():
 def addCoffee():  
     # go to this page only if logged. 
     if 'email' in session:
-        coffees = db.coffee.find({})
+        coffees = db.coffees.find({})
         
         if request.method == 'POST':
             # db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']})
@@ -157,13 +157,13 @@ def dashboard():
         # getting the count to feed the graph
         ethiopiaCounts = mongo.db.coffeesComments.find({"coffeeName": 'Ethiopia'}).count()
         
-        melozioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Melozio'}).count()
+        melozioCounts = mongo.db.coffeesComments.find({"coffeeName": 'India'}).count()
         
-        altissioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Altissio'}).count()
+        altissioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Livanto'}).count()
         
-        altodolceCounts = mongo.db.coffeesComments.find({"coffeeName": 'Alto Dolce'}).count()
+        altodolceCounts = mongo.db.coffeesComments.find({"coffeeName": 'Napoli'}).count()
         
-        livantoCounts = mongo.db.coffeesComments.find({"coffeeName": 'Livanto'}).count()
+        livantoCounts = mongo.db.coffeesComments.find({"coffeeName": 'Ristretto'}).count()
         
         return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions, bestRatedCoffees=bestRatedCoffees, myCoffees=myCoffees,
         ethiopiaCounts=ethiopiaCounts, melozioCounts=melozioCounts, altissioCounts=altissioCounts, altodolceCounts=altodolceCounts, livantoCounts=livantoCounts) 
@@ -175,11 +175,26 @@ def dashboard():
 @app.route('/coffeePods', methods=['GET', 'POST'])
 def coffeePods():
     if 'email' in session:
-        coffees = mongo.db.coffee.find({})
+        coffees = mongo.db.coffees.find({})
         
         if request.method == 'POST':
-            db.myCoffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'],'coffeeID':request.form['coffeeID'],
+            db.myCoffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'],'id':request.form['id'],
             'coffeeName':request.form['coffeeName'], 'brand':request.form['brand']})
+            
+            db.users.update_one({'email': session['email']},{'$addToSet': { 
+                'myCoffees': {
+                    'id':request.form['id'],
+                    'coffeeName':request.form['coffeeName'], 
+                    'brand':request.form['brand'],
+                    'description':request.form['description'],
+                    'intensity':request.form['intensity'],
+                    'cupSize':request.form['cupSize'],
+                    'roast':request.form['roast'],
+                    'acidity':request.form['acidity'],
+                    'bitterness':request.form['bitterness'],
+                    'body':request.form['body'],
+                    'ingredients':request.form['ingredients'],
+                    'machine':request.form['machine'] } }}, upsert=False)
             
             return redirect(url_for('coffeePods'))
             
