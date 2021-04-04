@@ -23,12 +23,12 @@ app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
-client = MongoClient('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+client = MongoClient("mongodb+srv://admin:admin@cluster0.zhcnd.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority")#('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 # DB name
-db = client.myFirstDatabase
+db = client.BeanTherePodThat
 
-app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-
+#app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+app.config["MONGO_URI"]="mongodb+srv://admin:admin@cluster0.zhcnd.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
 # mongo = PyMongo(app)
 mongo.init_app(app)
 
