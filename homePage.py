@@ -19,16 +19,18 @@ app.config['SECRET_KEY'] = 'someSecretKey123'
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
 app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
+# Former DB used in development. 
 # mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
-client = MongoClient("mongodb+srv://admin:admin@cluster0.zhcnd.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority")#('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+
+client = MongoClient('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority')
 # DB name
 db = client.BeanTherePodThat
 
-#app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-app.config["MONGO_URI"]="mongodb+srv://admin:admin@cluster0.zhcnd.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority"
+
 # mongo = PyMongo(app)
 mongo.init_app(app)
 
@@ -106,7 +108,7 @@ def registration():
 def addCoffee():  
     # go to this page only if logged. 
     if 'email' in session:
-        coffees = db.coffee.find({})
+        coffees = db.coffees.find({})
         
         if request.method == 'POST':
             # db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']})
@@ -157,13 +159,13 @@ def dashboard():
         # getting the count to feed the graph
         ethiopiaCounts = mongo.db.coffeesComments.find({"coffeeName": 'Ethiopia'}).count()
         
-        melozioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Melozio'}).count()
+        melozioCounts = mongo.db.coffeesComments.find({"coffeeName": 'India'}).count()
         
-        altissioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Altissio'}).count()
+        altissioCounts = mongo.db.coffeesComments.find({"coffeeName": 'Livanto'}).count()
         
-        altodolceCounts = mongo.db.coffeesComments.find({"coffeeName": 'Alto Dolce'}).count()
+        altodolceCounts = mongo.db.coffeesComments.find({"coffeeName": 'Napoli'}).count()
         
-        livantoCounts = mongo.db.coffeesComments.find({"coffeeName": 'Livanto'}).count()
+        livantoCounts = mongo.db.coffeesComments.find({"coffeeName": 'Ristretto'}).count()
         
         return render_template('dashboard.html', lastOpinions=lastOpinions, myLastOpinions=myLastOpinions, bestRatedCoffees=bestRatedCoffees, myCoffees=myCoffees,
         ethiopiaCounts=ethiopiaCounts, melozioCounts=melozioCounts, altissioCounts=altissioCounts, altodolceCounts=altodolceCounts, livantoCounts=livantoCounts) 
@@ -175,11 +177,26 @@ def dashboard():
 @app.route('/coffeePods', methods=['GET', 'POST'])
 def coffeePods():
     if 'email' in session:
-        coffees = mongo.db.coffee.find({})
+        coffees = mongo.db.coffees.find({})
         
         if request.method == 'POST':
-            db.myCoffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'],'coffeeID':request.form['coffeeID'],
+            db.myCoffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'],'id':request.form['id'],
             'coffeeName':request.form['coffeeName'], 'brand':request.form['brand']})
+            
+            db.users.update_one({'email': session['email']},{'$addToSet': { 
+                'myCoffees': {
+                    'id':request.form['id'],
+                    'coffeeName':request.form['coffeeName'], 
+                    'brand':request.form['brand'],
+                    'description':request.form['description'],
+                    'intensity':request.form['intensity'],
+                    'cupSize':request.form['cupSize'],
+                    'roast':request.form['roast'],
+                    'acidity':request.form['acidity'],
+                    'bitterness':request.form['bitterness'],
+                    'body':request.form['body'],
+                    'ingredients':request.form['ingredients'],
+                    'machine':request.form['machine'] } }}, upsert=False)
             
             return redirect(url_for('coffeePods'))
             
@@ -225,7 +242,9 @@ def chat():
 #     emit('notification', msg, broadcast=True)
 
 
-
+## REVIEW - Check if this route is really necessary.
+## @Juliana and Travis: Do you use this one for web? 
+## Not useful for Android.
 @app.route('/')
 def index():
     if 'useremail' in session:
@@ -233,10 +252,10 @@ def index():
         
     return redirect(url_for('login'))
  
-#
-# This part serves as Android auth
-# url should be with /api/
-#
+#####################################
+# This part serves as Android LOGIN #
+# url should be with /api/          #
+#####################################
 @app.route('/api/login', methods=['POST'])
 def android_login():
     users = mongo.db.users
@@ -258,10 +277,10 @@ def android_login():
     return error
         
     
-#
-# This part serves as Android registration
-# url should be with /api/
-#    
+############################################
+# This part serves as Android REGISTRATION #
+# url should be with /api/                 #
+############################################
 @app.route('/api/register', methods=['POST'])
 def android_register():
     users = mongo.db.users
@@ -285,8 +304,33 @@ def android_register():
         return 'Successfully registered!'
         
     return error
+
     
-    # This part serves as Android registration
+###################################################################################################
+# This route is responsible for providing the user's data to the Android app service.             #
+# It is used by getUserData() in beantherepodthat\retrofitApi.kt                                  #
+# Consider removing the password from the find_one query ("password":0} to improve app's security #
+###################################################################################################
+@app.route('/api/getuserdata', methods=['POST'])
+def getuserdata():
+    collection = mongo.db.users.find_one({'email':request.form['email']},{"_id":0})
+    return jsonify(collection)    
+
+
+###############################################################################################
+# This route is responsible for providing the general coffee list to the Android app service. #
+# It is used by getCoffeeList() in beantherepodthat\retrofitApi.kt                            #
+###############################################################################################
+@app.route('/api/getcoffeelist', methods=['POST'])
+def getcoffeelist():
+    collection = mongo.db.coffees.find({},{'_id':0})
+    print('collection:',collection)
+    datalist = list(collection)
+    return jsonify(datalist)
+
+    
+    ## !! REVIEW Identation and purpose of this route.!!##
+    # This part serves as Android registration 
     # url should be with /api/
     #
     @app.route('/api/coffeelist', methods=['POST'])
@@ -323,13 +367,13 @@ def android_register():
 
         return error
 
-
-    @app.route('/api/coffee', methods=['GET'])
-    def android_getcoffeelist():
-        collection = mongo.db.coffee.find()
-        print(collection)
-        print('Here is the collection')
-        return 'Get Coffees'
+# This is just a test for Android's interface. Should be removed.
+@app.route('/api/coffee', methods=['GET'])
+def android_getcoffeelist():
+    collection = mongo.db.coffee.find()
+    print(collection)
+    print('Here is the collection')
+    return 'Get Coffees'
 
 # profile
 import profile

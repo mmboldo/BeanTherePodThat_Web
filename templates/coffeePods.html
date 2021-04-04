@@ -61,9 +61,18 @@
               <form ACTION="" method = "POST">
                     <div class="element2" style="float:left; width: 150px; height:150px; display: block;margin-left: auto;margin-right: auto; "> 
                        <img src="static/img/podNespresso (1).png" style="display: block;margin-left: auto;margin-right: auto; width: 100%; height: 100%" alt="Logo">
-                       <p><input type="hidden" name="coffeeID"  id="coffeeID" value="{{coffee['coffeeID']}}"></p>
+                       <p><input type="hidden" name="id"  id="id" value="{{coffee['id']}}"></p>
                        <p><input type="hidden" name="coffeeName"  id="coffeeName" value="{{coffee['coffeeName']}}"></p>
                        <p><input type="hidden" name="brand" id="brand" value="{{coffee['brand']}}"></p>
+                       <p><input type="hidden" name="description" id="description" value="{{coffee['description']}}"></p>
+                       <p><input type="hidden" name="intensity" id="intensity" value="{{coffee['intensity']}}"></p>
+                       <p><input type="hidden" name="cupSize" id="cupSize" value="{{coffee['cupSize']}}"></p>
+                       <p><input type="hidden" name="roast" id="roast" value="{{coffee['roast']}}"></p>
+                       <p><input type="hidden" name="acidity" id="acidity" value="{{coffee['acidity']}}"></p>
+                       <p><input type="hidden" name="bitterness" id="bitterness" value="{{coffee['bitterness']}}"></p>
+                       <p><input type="hidden" name="body" id="body" value="{{coffee['body']}}"></p>
+                       <p><input type="hidden" name="ingredients" id="ingredients" value="{{coffee['ingredients']}}"></p>
+                       <p><input type="hidden" name="machine" id="machine" value="{{coffee['machine']}}"></p>
                        <p><button class = "w3-button  w3-section  w3-aqua" id="create" type="submit">ADD TO MY</br>DASHBOARD</button></p>   
                     </div>
               </form>
