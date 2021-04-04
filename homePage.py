@@ -113,6 +113,22 @@ def addCoffee():
             db.coffeesComments.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'], 'coffeeName':request.form['coffeeName'], 
             'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now()}) 
                
+               
+            db.users.update_one({'email': session['email']},{'$addToSet': { 
+                'myCoffees': {
+                    'id':request.form['id'],
+                    'coffeeName':request.form['coffeeName'], 
+                    'brand':request.form['brand'],
+                    'description':request.form['description'],
+                    'intensity':request.form['intensity'],
+                    'cupSize':request.form['cupSize'],
+                    'roast':request.form['roast'],
+                    'acidity':request.form['acidity'],
+                    'bitterness':request.form['bitterness'],
+                    'body':request.form['body'],
+                    'ingredients':request.form['ingredients'],
+                    'machine':request.form['machine'] } }}, upsert=False)
+                    
         return render_template('addCoffee.html', coffees=coffees) 
         
 
@@ -149,8 +165,8 @@ def dashboard():
         lastOpinions = mongo.db.coffeesComments.find({}).sort('last_modified', -1).limit(-5)
     
         myLastOpinions= mongo.db.coffeesComments.find({'email': session['email']}).sort('last_modified', -1).limit(-5)
-        
-        bestRatedCoffees = mongo.db.coffeesComments.distinct( "coffeeName" , { "rate" : "5" } )
+
+        bestRatedCoffees = mongo.db.coffeesComments.distinct( "coffeeName" , { "rate" : "5" })
 
         myCoffees = mongo.db.myCoffees.find({'email': session['email']})
         
@@ -211,34 +227,6 @@ def chat():
     else:
         return redirect(url_for('login'))
     
-    
-# # this block of routes are for the chat. 
-# @socketio.on('username')
-# def receive_username_from_client(data):
-#     data = session['email']
-#     print(data) # this is just to verify/see the data received from the client
-#     users[data] = request.sid; # the session id is "saved"
-#     send_broadcast_message('{} your message has been sent '.format(data))
-  
-# @socketio.on('messages')
-# def receive_messages(msg):
-#     send_broadcast_message('{} -- sent by someone'.format(msg))
-    
-# @socketio.on('private_msg')
-# def receive_private_from_client(data):
-#     # data = session['email']
-#     print(data) # the data was sent in json format
-#     person = data['to']
-#     message = data['message']
-#     if person in users.keys():
-#         emit('notification', message, room = users[person]) # the session id is used as individual "room"
-#     else: 
-#         emit('notification', '{} does not exists'.format(person))
-
-# # this would send a message to ALL clients
-# def send_broadcast_message(msg):
-#     emit('notification', msg, broadcast=True)
-
 
 
 @app.route('/')
