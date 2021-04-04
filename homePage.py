@@ -346,6 +346,14 @@ def getuserdata():
     collection = mongo.db.users.find_one({'email':request.form['email']},{"_id":0})
     return jsonify(collection)    
 
+# This route is responsible for providing the general coffee list to the Android app service.
+# It is used by getCoffeeList() in beantherepodthat\retrofitApi.kt 
+@app.route('/api/getcoffeelist', methods=['POST'])
+def getcoffeelist():
+    collection = mongo.db.coffees.find({},{'_id':0})
+    print('collection:',collection)
+    datalist = list(collection)
+    return jsonify(datalist)
 
 # This is just a test for Android's interface. Should be removed.
 @app.route('/api/coffee', methods=['GET'])
@@ -354,8 +362,6 @@ def android_getcoffeelist():
     print(collection)
     print('Here is the collection')
     return 'Get Coffees'
-
-
 
 # profile
 import profile
