@@ -19,6 +19,7 @@ app.config['SECRET_KEY'] = 'someSecretKey123'
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
 app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
+# Former DB used in development. 
 # mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 # secret key is used to make the client-side sessions secure
@@ -228,7 +229,9 @@ def chat():
         return redirect(url_for('login'))
     
 
-
+## REVIEW - Check if this route is really necessary.
+## @Juliana and Travis: Do you use this one for web? 
+## Not useful for Android.
 @app.route('/')
 def index():
     if 'useremail' in session:
@@ -236,10 +239,10 @@ def index():
         
     return redirect(url_for('login'))
  
-#
-# This part serves as Android auth
-# url should be with /api/
-#
+#####################################
+# This part serves as Android LOGIN #
+# url should be with /api/          #
+#####################################
 @app.route('/api/login', methods=['POST'])
 def android_login():
     users = mongo.db.users
@@ -261,10 +264,10 @@ def android_login():
     return error
         
     
-#
-# This part serves as Android registration
-# url should be with /api/
-#    
+############################################
+# This part serves as Android REGISTRATION #
+# url should be with /api/                 #
+############################################
 @app.route('/api/register', methods=['POST'])
 def android_register():
     users = mongo.db.users
@@ -288,8 +291,33 @@ def android_register():
         return 'Successfully registered!'
         
     return error
+
     
-    # This part serves as Android registration
+###################################################################################################
+# This route is responsible for providing the user's data to the Android app service.             #
+# It is used by getUserData() in beantherepodthat\retrofitApi.kt                                  #
+# Consider removing the password from the find_one query ("password":0} to improve app's security #
+###################################################################################################
+@app.route('/api/getuserdata', methods=['POST'])
+def getuserdata():
+    collection = mongo.db.users.find_one({'email':request.form['email']},{"_id":0})
+    return jsonify(collection)    
+
+
+###############################################################################################
+# This route is responsible for providing the general coffee list to the Android app service. #
+# It is used by getCoffeeList() in beantherepodthat\retrofitApi.kt                            #
+###############################################################################################
+@app.route('/api/getcoffeelist', methods=['POST'])
+def getcoffeelist():
+    collection = mongo.db.coffees.find({},{'_id':0})
+    print('collection:',collection)
+    datalist = list(collection)
+    return jsonify(datalist)
+
+    
+    ## !! REVIEW Identation and purpose of this route.!!##
+    # This part serves as Android registration 
     # url should be with /api/
     #
     @app.route('/api/coffeelist', methods=['POST'])
@@ -326,13 +354,13 @@ def android_register():
 
         return error
 
-
-    @app.route('/api/coffee', methods=['GET'])
-    def android_getcoffeelist():
-        collection = mongo.db.coffee.find()
-        print(collection)
-        print('Here is the collection')
-        return 'Get Coffees'
+# This is just a test for Android's interface. Should be removed.
+@app.route('/api/coffee', methods=['GET'])
+def android_getcoffeelist():
+    collection = mongo.db.coffee.find()
+    print(collection)
+    print('Here is the collection')
+    return 'Get Coffees'
 
 # profile
 import profile
