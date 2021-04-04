@@ -338,13 +338,24 @@ def android_register():
 
         return error
 
+# This route is responsible for providing the user's data to the Android app service.
+# It is used by getUserData() in beantherepodthat\retrofitApi.kt 
+# Consider removing the password from the find_one query ("password":0} to improve app's security
+@app.route('/api/getuserdata', methods=['POST'])
+def getuserdata():
+    collection = mongo.db.users.find_one({'email':request.form['email']},{"_id":0})
+    return jsonify(collection)    
 
-    @app.route('/api/coffee', methods=['GET'])
-    def android_getcoffeelist():
-        collection = mongo.db.coffee.find()
-        print(collection)
-        print('Here is the collection')
-        return 'Get Coffees'
+
+# This is just a test for Android's interface. Should be removed.
+@app.route('/api/coffee', methods=['GET'])
+def android_getcoffeelist():
+    collection = mongo.db.coffee.find()
+    print(collection)
+    print('Here is the collection')
+    return 'Get Coffees'
+
+
 
 # profile
 import profile
