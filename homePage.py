@@ -341,9 +341,13 @@ def getcoffeelist():
 @app.route('/api/myCoffees', methods=['POST'])
 def android_myCoffees():
 
-    db.test.insert_one( {'myCoffees': {
+    # collection = mongo.db.users.find({'email': request.form['email']})
+    
+    db.users.update_one({'email':request.form['email']},{'$addToSet': { 
+        'myCoffees': {
         'id':request.form['id'],
         'coffeeName':request.form['coffeeName'], 
+        'coffeeImg':request.form['coffeeImg'], 
         'brand':request.form['brand'],
         'description':request.form['description'],
         'intensity':request.form['intensity'],
@@ -354,7 +358,7 @@ def android_myCoffees():
         'body':request.form['body'],
         'ingredients':request.form['ingredients'],
         'machine':request.form['machine'],
-        'rate': request.form['rate']} })
+        'rate': request.form['rate']} }}, upsert=False)
     return 'Successfully inserted Coffee!'
 
 # This is just a test for Android's interface. Should be removed.
