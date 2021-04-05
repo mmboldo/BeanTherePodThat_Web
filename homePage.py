@@ -111,7 +111,7 @@ def addCoffee():
         coffees = db.coffees.find({})
         
         if request.method == 'POST':
-            # db.coffees.insert_one({'name':session['firstName'] , 'coffeeName':request.form['coffeeName'], 'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate']})
+            
             db.coffeesComments.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'], 'coffeeName':request.form['coffeeName'], 
             'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now()}) 
                
@@ -159,7 +159,7 @@ def dashboard():
 
         bestRatedCoffees = mongo.db.coffeesComments.distinct( "coffeeName" , { "rate" : "5" })
 
-        myCoffees = mongo.db.myCoffees.find({'email': session['email']})
+        myCoffees = mongo.db.users.find({'email': session['email']}, {"myCoffees.coffeeName"})
         
         # getting the count to feed the graph
         ethiopiaCounts = mongo.db.coffeesComments.find({"coffeeName": 'Ethiopia'}).count()
@@ -295,47 +295,6 @@ def getcoffeelist():
     print('collection:',collection)
     datalist = list(collection)
     return jsonify(datalist)
-    
-#route to add a new myCoffee object to the user myCoffees array in Mongo
-
-    
-    ## !! REVIEW Identation and purpose of this route.!!##
-    # This part serves as Android registration 
-    # url should be with /api/
-    #
-    # @app.route('/api/coffeelist', methods=['POST'])
-    # def android_coffeelist():
-    #     coffeelist = mongo.db.coffees
-    #     existing_coffee = coffeelist.find_one({'coffeeID' : request.form['coffeeID']})
-    #     coffeeID = request.form['coffeeID']
-    #     coffeeName = request.form['coffeeName']
-    #     brand = request.form['brand']
-    #     description = request.form['description']
-    #     intensity = request.form['intensity']
-    #     cupSize = request.form['cupSize']
-    #     roast = request.form['roast']
-    #     acidity = request.form['acidity']
-    #     bitterness = request.form['bitterness']
-    #     body = request.form['body']
-    #     ingredients = request.form['ingredients']
-    #     machine = request.form['machine']
-
-    #     error = None
-
-    #     if not coffeeID:
-    #         error = 'ID is required.'
-    #     elif existing_coffee:
-    #         error = 'That coffee already exists!'
-
-    #     if error is None:
-    #         coffeelist.insert_one({'coffeeID' : request.form['coffeeID'], 'coffeeName' : request.form['coffeeName'], 'brand' : request.form['brand'],
-    #         'description' : request.form['description'], 'intensity' : request.form['intensity'], 'cupSize' : request.form['cupSize'],
-    #         'roast' : request.form['roast'], 'acidity' : request.form['acidity'], 'bitterness' : request.form['bitterness'], 'body' : request.form['body'],
-    #         'ingredients' : request.form['ingredients'], 'machine' : request.form['machine']
-    #         })
-    #         return 'Successfully inserted Coffee!'
-
-    #     return error
 
 
 # Adding a coffee to my coffee list
