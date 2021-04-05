@@ -115,20 +115,9 @@ def addCoffee():
             'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now()}) 
                
                
-            db.users.update_one({'email': session['email']},{'$addToSet': { 
-                'myCoffees': {
-                    'id':request.form['id'],
-                    'coffeeName':request.form['coffeeName'], 
-                    'brand':request.form['brand'],
-                    'description':request.form['description'],
-                    'intensity':request.form['intensity'],
-                    'cupSize':request.form['cupSize'],
-                    'roast':request.form['roast'],
-                    'acidity':request.form['acidity'],
-                    'bitterness':request.form['bitterness'],
-                    'body':request.form['body'],
-                    'ingredients':request.form['ingredients'],
-                    'machine':request.form['machine'] } }}, upsert=False)
+            db.users.update_one({'email': session['email'], "myCoffees.coffeeName": request.form['coffeeName']},{'$addToSet': { 'myComments': {
+                
+                    'coffeeName': request.form['coffeeName'],'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now() }}}, upsert=False)
                     
         return render_template('addCoffee.html', coffees=coffees) 
         
@@ -219,18 +208,9 @@ def coffeePods():
     # if not logged, user will be forward to login page 
     return redirect(url_for('login'))
     
-# route for the chat
-@app.route('/chat')
-def chat():
-    
-    if 'email' in session:
-        return render_template('chat.html')
-    else:
-        return redirect(url_for('login'))
-    
 
 ## REVIEW - Check if this route is really necessary.
-## @Juliana and Travis: Do you use this one for web? 
+## @Juliana and Travis: Do you use this one for web? Just leave it, so the main page can be redirected to login
 ## Not useful for Android.
 @app.route('/')
 def index():
@@ -314,45 +294,68 @@ def getcoffeelist():
     print('collection:',collection)
     datalist = list(collection)
     return jsonify(datalist)
+    
+#route to add a new myCoffee object to the user myCoffees array in Mongo
 
     
     ## !! REVIEW Identation and purpose of this route.!!##
     # This part serves as Android registration 
     # url should be with /api/
     #
-    @app.route('/api/coffeelist', methods=['POST'])
-    def android_coffeelist():
-        coffeelist = mongo.db.coffee
-        existing_coffee = coffeelist.find_one({'coffeeID' : request.form['coffeeID']})
-        coffeeID = request.form['coffeeID']
-        coffeeName = request.form['coffeeName']
-        brand = request.form['brand']
-        description = request.form['description']
-        intensity = request.form['intensity']
-        cupSize = request.form['cupSize']
-        roast = request.form['roast']
-        acidity = request.form['acidity']
-        bitterness = request.form['bitterness']
-        body = request.form['body']
-        ingredients = request.form['ingredients']
-        machine = request.form['machine']
+    # @app.route('/api/coffeelist', methods=['POST'])
+    # def android_coffeelist():
+    #     coffeelist = mongo.db.coffees
+    #     existing_coffee = coffeelist.find_one({'coffeeID' : request.form['coffeeID']})
+    #     coffeeID = request.form['coffeeID']
+    #     coffeeName = request.form['coffeeName']
+    #     brand = request.form['brand']
+    #     description = request.form['description']
+    #     intensity = request.form['intensity']
+    #     cupSize = request.form['cupSize']
+    #     roast = request.form['roast']
+    #     acidity = request.form['acidity']
+    #     bitterness = request.form['bitterness']
+    #     body = request.form['body']
+    #     ingredients = request.form['ingredients']
+    #     machine = request.form['machine']
 
-        error = None
+    #     error = None
 
-        if not coffeeID:
-            error = 'ID is required.'
-        elif existing_coffee:
-            error = 'That coffee already exists!'
+    #     if not coffeeID:
+    #         error = 'ID is required.'
+    #     elif existing_coffee:
+    #         error = 'That coffee already exists!'
 
-        if error is None:
-            coffeelist.insert_one({'coffeeID' : request.form['coffeeID'], 'coffeeName' : request.form['coffeeName'], 'brand' : request.form['brand'],
-            'description' : request.form['description'], 'intensity' : request.form['intensity'], 'cupSize' : request.form['cupSize'],
-            'roast' : request.form['roast'], 'acidity' : request.form['acidity'], 'bitterness' : request.form['bitterness'], 'body' : request.form['body'],
-            'ingredients' : request.form['ingredients'], 'machine' : request.form['machine']
-            })
-            return 'Successfully inserted Coffee!'
+    #     if error is None:
+    #         coffeelist.insert_one({'coffeeID' : request.form['coffeeID'], 'coffeeName' : request.form['coffeeName'], 'brand' : request.form['brand'],
+    #         'description' : request.form['description'], 'intensity' : request.form['intensity'], 'cupSize' : request.form['cupSize'],
+    #         'roast' : request.form['roast'], 'acidity' : request.form['acidity'], 'bitterness' : request.form['bitterness'], 'body' : request.form['body'],
+    #         'ingredients' : request.form['ingredients'], 'machine' : request.form['machine']
+    #         })
+    #         return 'Successfully inserted Coffee!'
 
-        return error
+    #     return error
+
+
+# Adding a coffee to my coffee list
+@app.route('/api/myCoffees', methods=['POST'])
+def android_myCoffees():
+
+    db.test.insert_one( {'myCoffees': {
+        'id':request.form['id'],
+        'coffeeName':request.form['coffeeName'], 
+        'brand':request.form['brand'],
+        'description':request.form['description'],
+        'intensity':request.form['intensity'],
+        'cupSize':request.form['cupSize'],
+        'roast':request.form['roast'],
+        'acidity':request.form['acidity'],
+        'bitterness':request.form['bitterness'],
+        'body':request.form['body'],
+        'ingredients':request.form['ingredients'],
+        'machine':request.form['machine'],
+        'rate': request.form['rate']} })
+    return 'Successfully inserted Coffee!'
 
 # This is just a test for Android's interface. Should be removed.
 @app.route('/api/coffee', methods=['GET'])
@@ -361,6 +364,7 @@ def android_getcoffeelist():
     print(collection)
     print('Here is the collection')
     return 'Get Coffees'
+    
 
 # profile
 import profile
