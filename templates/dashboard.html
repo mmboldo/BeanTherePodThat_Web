@@ -59,10 +59,13 @@
         <div class="element" style="background:#f1e1d4">
           <p style="text-align:center">Here is the list of your coffee pods </p> 
          
-          {% for myCoffee in myCoffees %} 
+          {% for myCoffeesObj in myCoffees %} 
+            {% for myCoffee in myCoffeesObj['myCoffees'] %} 
+          
              <div class="element" style="background:#b4c9cf;padding-right:5px;padding-left:5px; width:150px">
-              <h5>{{myCoffee['coffeeName']}} </br> {{myCoffee['brand']}}</h5>
+              <h5>{{myCoffee['coffeeName']}}</h5> 
              </div>
+            {% endfor %}
           {% endfor %}
         </div>
               
