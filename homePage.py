@@ -367,6 +367,9 @@ def android_getcoffeelist():
 import profile
 app.register_blueprint(profile.bp)
 
+import machine
+app.register_blueprint(machine.bp)
+
 @app.route('/file/<filename>')
 def file(filename):
     return mongo.send_file(filename)

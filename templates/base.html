@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Kristi&family=Quicksand:wght@300&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=Shadows+Into+Light+Two&display=swap" rel="stylesheet">
-<link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/logoBTPTBrown.png')}}" />
+<link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='img/logoBTPTBrown.png')}}" />
     <title>{% block title  %}{% endblock %} - Bean There pod that</title>
     
 </head>
@@ -16,11 +16,11 @@
     <!-- Navbar (sit on top) -->
 <div class="w3-top">
     <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
-      <a href="homePage" class="w3-bar-item w3-button" style="font-family: 'Reenie Beanie'; font-style: cursive; color: white; margin-left: 240px; font-size: 40px">Bean There Pod That</a>
+      <a href="{{url_for('homePage')}}" class="w3-bar-item w3-button" style="font-family: 'Reenie Beanie'; font-style: cursive; color: white; margin-left: 240px; font-size: 40px">Bean There Pod That</a>
       <!-- Right-sided navbar links. Hide them on small screens -->
       <div class="w3-right w3-hide-small">
-        <a href="homePage" class="w3-bar-item w3-button">About Us</a>
-        <a href="registration" class="w3-bar-item w3-button">Register</a>
+        <a href="{{url_for('homePage')}}" class="w3-bar-item w3-button">About Us</a>
+        <a href="{{url_for('registration')}}" class="w3-bar-item w3-button">Register</a>
         <a href="#contact" class="w3-bar-item w3-button">Contact</a>
       </div>
     </div>
@@ -30,14 +30,14 @@
   <nav class="w3-sidebar w3-bar-block w3-black w3-collapse w3-top" style="z-index:3;width:240px" id="mySidebar">
     <div class="w3-container w3-display-container w3-padding-16">
       <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
-      <img src="{{url_for('static', filename='image/logoBTPTBrown.png')}}" class="w3-round w3-image w3-opacity-min" style="margin-left:30px;" alt="Logo" width="140" height="160">
+      <img src="{{url_for('static', filename='img/logoBTPTBrown.png')}}" class="w3-round w3-image w3-opacity-min" style="margin-left:30px;" alt="Logo" width="140" height="160">
     </div>
   <div class="w3-large w3-text-grey" style="letter-spacing: 5px; margin-left:20px">
-    <a href="dashboard" class="w3-bar-item w3-button">Dashboard</a>
-    <a href="coffeePods" class="w3-bar-item w3-button">Coffee Pods</a>
-    <a href="#" class="w3-bar-item w3-button">My Machines</a>
-    <a href="addCoffee" class="w3-bar-item w3-button">Comment a Coffee</a>
-    <a href="profile" class="w3-bar-item w3-button">My Profile</a>
+    <a href="{{url_for('dashboard')}}" class="w3-bar-item w3-button">Dashboard</a>
+    <a href="{{url_for('coffeePods')}}" class="w3-bar-item w3-button">Coffee Pods</a>
+    <a href="{{url_for('machine.myMachine')}}" class="w3-bar-item w3-button">My Machines</a>
+    <a href="{{url_for('addCoffee')}}" class="w3-bar-item w3-button">Comment a Coffee</a>
+    <a href="{{url_for('profile.displayProfile')}}" class="w3-bar-item w3-button">My Profile</a>
     <a href="logout" class="w3-bar-item w3-button">Logout</a>
   </div>
   </nav>

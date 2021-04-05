@@ -37,8 +37,10 @@ collection = mongo
 #     form.about_me.data = current_user.about_me
 #     return render_template('edit_profile.html', form=form)
 
+
+
 @bp.route("/", methods=['GET'])
-def display_profile():
+def displayProfile():
         # if request.method == "POST":
         #     update_profile(request)
         #     mongo.db.profile.update_one(current_email,)
