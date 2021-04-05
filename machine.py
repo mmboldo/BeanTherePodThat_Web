@@ -23,11 +23,11 @@ collection = mongo
 def myMachine():
     #if 'email' in session:
         email = 'travis@gmail.com'
-        current_user = db.users.find({'email':email},{'myMachines':1})
+        current_user = db.users.find({'email':email})
         user_json = json_util.dumps(current_user)
         machines = json.loads(user_json)
         
-        return #render_template("machine/machine.html", machines = machines)
+        return jsonify(machines)#render_template("machine/machine.html", machines = machines)
     #return redirect(url_for('login'))
     
 

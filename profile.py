@@ -60,25 +60,32 @@ def edit_profile():
     
 
     if request.method == "POST":
-        username = request.form["username"]
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
-        machine = request.form["machine"]
         email = request.form["email"]
         occupation = request.form["occupation"]
-        birthday = datetime.strptime(request.form['birthday'], "%Y-%m-%d")
-        #updatge database
+        password = request.form['password']
+        #update database users
+        db.users.update_one({
+            'email':profile['email']
+        },{
+            '$set': {
+                'firstName': firstname,
+                'lastName': lastname,
+                'password': password,
+                'occupation':occupation,
+             }
+        }
+        )
+        #updatge database myProfile
         db.profile.update_one({
             'email': profile['email']
         },{
             '$set': {
-                'username':username,
                 'firstname':firstname,
                 'lastname':lastname,
-                'machine':machine,
                 'email':email,
                 'occupation':occupation,
-                'birthday':birthday
             }
         }, upsert=False)
         return redirect('/profile')
@@ -88,7 +95,7 @@ def edit_profile():
 # profile image
 @bp.route('/upload-profile', methods=['POST'])
 def upload():
-    email = session.get('email')#"wuc@gmail.com"
+    email = session.get('email')
     profile = db.profile.find_one({"email": email})
     error = None
     if 'profile_image' in request.files:
@@ -110,6 +117,14 @@ def upload():
             },{
                 '$set': {
                     'profile_image_name':profile_image.filename
+                }
+            }, upsert=False)
+            # update users
+            db.users.update_one({
+                'email': profile['email']
+            },{
+                '$set': {
+                    'profileImageName':profile_image.filename
                 }
             }, upsert=False)
             return redirect('/profile/edit-profile')

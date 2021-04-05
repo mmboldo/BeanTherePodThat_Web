@@ -17,24 +17,14 @@
 
       <form method="post">
         <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">
-          <label for="username">Username</label>
-          <input name="username" id="username"
-          value="{{profile['username'] }}" required>
+          <label for="firstname">Firstname</label>
+          <input name="firstname" id="firstname"
+          value="{{profile['firstname'] }}" required>
         </h1>
-        <p>
-        <label for="firstname">First Name</label>
-        <input name="firstname" id="firstname"
-        value="{{profile['firstname'] }}" required>
-        </p>
         <p>
         <label for="lastname">Last Name</label>
         <input name="lastname" id="lastname"
         value="{{profile['lastname'] }}" required>
-        </p>
-        <p>
-        <label for="machine">Machine Model</label>
-        <input name="machine" id="machine"
-        value="{{profile['machine'] }}" required>
         </p>
         <p>
         <label for="email">Email Address</label>
@@ -47,10 +37,10 @@
         value="{{profile['occupation'] }}" required>
         </p>
         <p>
-        <label for="birthday">Birthday</label>
-        <input name="birthday" id="birthday" type="date"
-        value="{{profile['birthday'].strftime('%Y-%m-%d') }}" required>
-        </p>
+          <label for="password">Password</label>
+          <input name="password" id="password" type="password"
+          value="{{profile['password'] }}" required>
+          </p>
         <p class="w3-center">
            <input class="w3-button w3-light-grey w3-section w3-center" name="editProfile" type="submit" value="Save"/>
         </p>
