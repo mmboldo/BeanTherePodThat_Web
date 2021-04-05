@@ -45,12 +45,14 @@ def displayProfile():
         #     update_profile(request)
         #     mongo.db.profile.update_one(current_email,)
         #     return
-    email = session.get('email')
-    profile = db.profile.find_one({"email": email})
-    if profile == None:
-       init_profile(email)
-    profile = db.profile.find_one({"email": email})
-    return render_template("profile/profile.html", profile=profile)
+    if 'email' in session:
+        email = session.get('email')
+        profile = db.profile.find_one({"email": email})
+        if profile == None:
+            init_profile(email)
+        profile = db.profile.find_one({"email": email})
+        return render_template("profile/profile.html", profile=profile)
+    return redirect(url_for('login'))
 
     
 @bp.route("/edit-profile", methods=['GET', 'POST'])

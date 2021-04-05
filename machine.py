@@ -21,24 +21,25 @@ collection = mongo
 
 @bp.route('/')
 def myMachine():
-    #if 'email' in session:
-        email = 'travis@gmail.com'
-        current_user = db.users.find({'email':email})
-        user_json = json_util.dumps(current_user)
-        machines = json.loads(user_json)
+    if 'email' in session:
+        email = session['email']
         
-        return jsonify(machines)#render_template("machine/machine.html", machines = machines)
-    #return redirect(url_for('login'))
+        #myMachines = current_user['myMachines']
+
+        machines = db.myMachines.find({'email': email})
+        
+        return render_template("machine/machine.html", machines = machines)
+    return redirect(url_for('login'))
     
 
 
 @bp.route('/add-machine', methods=['GET', 'POST'])
 def addMachine():
-    #if 'email' in session:
+    if 'email' in session:
         if request.method == 'POST':
             machineName = request.form['machineName']
             targetMachine = db.coffeeMachines.find_one({'machineName':machineName})
-            db.users.update_one({'email':'travis@gmail.com'},{'$addToSet': { 
+            db.users.update_one({'email':session['email']},{'$addToSet': { 
                 'myMachines': {
                     'id':targetMachine['_id'],
                     'machineName':targetMachine['machineName'], 
@@ -47,12 +48,22 @@ def addMachine():
                     'imageFilename':targetMachine['imageFilename'], 
                     'url':targetMachine['url'], 
                     'description':targetMachine['description']} }},  upsert=False)
+            #update myMachine database
+            db.myMachines.insert_one({
+                    'email':'travis@gmail.com',
+                    'id':targetMachine['_id'],
+                    'machineName':targetMachine['machineName'], 
+                    'machineType':targetMachine['machineType'], 
+                    'brand':targetMachine['brand'], 
+                    'imageFilename':targetMachine['imageFilename'], 
+                    'url':targetMachine['url'], 
+                    'description':targetMachine['description']  })
             return redirect('/machine')
 
     
         machines = db.coffeeMachines.find({})
         return render_template("machine/add_machine.html", machines=machines)
-    #return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 
