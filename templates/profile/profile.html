@@ -12,13 +12,10 @@
       </div>
   
       <div class="w3-col m6 w3-padding-large" style="margin-top: 35px">
-        <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">{{ profile['username'] }}</h1>
-        <p>First Name:      <b>{{ profile['firstname'] }}</b></p>
+        <h1 class="w3-center" style="font-family: 'Reenie Beanie', cursive; font-size: 35px;">Hello! {{ profile['firstname'] }}</h1>
         <p>Last Name:       <b>{{ profile['lastname'] }}</b></p>
-        <p>Machine Model:   <b>{{ profile['machine'] }}</b></p>
         <p>Email Address:   <b>{{ profile['email'] }}</b></p>
         <p>Occupation:      <b>{{ profile['occupation']}}</b></p>
-        <p>Birthday:        <b>{{ profile['birthday'].strftime('%Y-%m-%d') }}</b></p>
         
       </div>
       

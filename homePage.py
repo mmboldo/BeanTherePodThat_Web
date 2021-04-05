@@ -24,6 +24,7 @@ app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 
 # secret key is used to make the client-side sessions secure
 app.config.update(dict(SECRET_KEY='yoursecretkey'))
+
 client = MongoClient('mongodb+srv://danisrdias:CBlossom.31@cluster0.5ahgv.mongodb.net/BeanTherePodThat?retryWrites=true&w=majority')
 # DB name
 db = client.BeanTherePodThat
@@ -294,7 +295,6 @@ def getcoffeelist():
     datalist = list(collection)
     return jsonify(datalist)
 
-
 # Adding a coffee to my coffee list
 @app.route('/api/myCoffees', methods=['POST'])
 def android_myCoffees():
@@ -316,9 +316,11 @@ def android_myCoffees():
         'body':request.form['body'],
         'ingredients':request.form['ingredients'],
         'machine':request.form['machine'],
-        'rate': request.form['rate']} }}, upsert=False)
+        'rate': request.form['rate'],
+        'favorite': request.form['favorite']    
+        } }}, upsert=False)
     return 'Successfully inserted Coffee!'
-
+    
 # This is just a test for Android's interface. Should be removed.
 @app.route('/api/coffee', methods=['GET'])
 def android_getcoffeelist():
@@ -331,6 +333,9 @@ def android_getcoffeelist():
 # profile
 import profile
 app.register_blueprint(profile.bp)
+
+import machine
+app.register_blueprint(machine.bp)
 
 @app.route('/file/<filename>')
 def file(filename):

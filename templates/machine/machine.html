@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+<style>
+  div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+  }
+  
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+  
+  div.gallery img {
+    width: 100%;
+    height: auto;
+  }
+  
+  div.desc {
+    padding: 15px;
+    text-align: center;
+  }
+  </style>
+{% block title %}Bean There Pod That - Edit Profile{% endblock %}
+{% block page_content %}
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- About Section -->
+    <div class="w3-row w3-padding-64" id="about">
+      <div class="w3-col m6 w3-padding-large w3-hide-small">
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding w3-black">
+            <h2>My Machines</h2>
+  </div>
+  <ul class="w3-ul w3-hoverable">
+    <li class="w3-padding-16  w3-center">
+        <p><a href="add-machine" class="w3-button w3-section w3-aqua" name="addMachine" type="submit">Add Machine</a></p>
+    </li>
+  
+    {% for machine in machines %}
+                <li>{{machine['machineName']}}<img src="{{url_for('file', filename=machine['imageFilename'])}}"></li>
+                {% endfor %}
+    </ul>
+
+  </div>
+  </div>
+  
+  </div>
+</div>
+
+
+{% endblock%}
