@@ -115,11 +115,7 @@ def addCoffee():
             db.coffeesComments.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'], 'coffeeName':request.form['coffeeName'], 
             'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now()}) 
                
-               
-            db.users.update_one({'email': session['email'], "myCoffees.coffeeName": request.form['coffeeName']},{'$addToSet': { 'myComments': {
-                
-                    'coffeeName': request.form['coffeeName'],'coffeeOpinion': request.form['coffeeOpinion'], 'rate':request.form['rate'], 'last_modified': datetime.now() }}}, upsert=False)
-                    
+
         return render_template('addCoffee.html', coffees=coffees) 
         
 
@@ -188,10 +184,12 @@ def coffeePods():
             db.myCoffees.insert_one({'firstName':session['firstName'], 'lastName':session['lastName'], 'email':session['email'],'id':request.form['id'],
             'coffeeName':request.form['coffeeName'], 'brand':request.form['brand']})
             
-            db.users.update_one({'email': session['email']},{'$addToSet': { 
+            db.users.update_one({'email':session['email']},
+                {'$addToSet': { 
                 'myCoffees': {
                     'id':request.form['id'],
                     'coffeeName':request.form['coffeeName'], 
+                    'coffeeImg' :"http://3.238.123.48:5000/file/napoli.png",
                     'brand':request.form['brand'],
                     'description':request.form['description'],
                     'intensity':request.form['intensity'],
@@ -201,7 +199,10 @@ def coffeePods():
                     'bitterness':request.form['bitterness'],
                     'body':request.form['body'],
                     'ingredients':request.form['ingredients'],
-                    'machine':request.form['machine'] } }}, upsert=False)
+                    'machine':request.form['machine'],
+                    'favorite': False,
+                    'rate': "0.0"
+                } }}, upsert=False)
             
             return redirect(url_for('coffeePods'))
             
@@ -210,9 +211,7 @@ def coffeePods():
     return redirect(url_for('login'))
     
 
-## REVIEW - Check if this route is really necessary.
-## @Juliana and Travis: Do you use this one for web? Just leave it, so the main page can be redirected to login
-## Not useful for Android.
+# redirect to login page
 @app.route('/')
 def index():
     if 'useremail' in session:
@@ -296,7 +295,6 @@ def getcoffeelist():
     datalist = list(collection)
     return jsonify(datalist)
 
-
 # Adding a coffee to my coffee list
 @app.route('/api/myCoffees', methods=['POST'])
 def android_myCoffees():
@@ -318,9 +316,11 @@ def android_myCoffees():
         'body':request.form['body'],
         'ingredients':request.form['ingredients'],
         'machine':request.form['machine'],
-        'rate': request.form['rate']} }}, upsert=False)
+        'rate': request.form['rate'],
+        'favorite': request.form['favorite']    
+        } }}, upsert=False)
     return 'Successfully inserted Coffee!'
-
+    
 # This is just a test for Android's interface. Should be removed.
 @app.route('/api/coffee', methods=['GET'])
 def android_getcoffeelist():
