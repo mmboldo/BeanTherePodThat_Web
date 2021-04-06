@@ -14,21 +14,66 @@
           <li class="w3-padding-16">
             <form action="{{url_for('machine.addMachine')}}" method="POST">
               <p><select class="w3-input w3-padding-16" name="machineName" id="machineName">
-                {% for machine in machines %}
-                <option id="machineName" name="machineName" value="{{machine['machineName']}}" selected="selected">{{machine['machineName']}}</option>
-                {% endfor %}
-              </select></p>
-            
-            <p><input class="w3-button w3-section w3-aqua" value="Confirm" name="addMachine" href="{{url_for('machine.addMachine')}}"
-                type="submit"/></p>
-              </form>
+                  {% for machine in machines %}
+                  <option id="machineName" name="machineName" value="{{machine['machineName']}}" selected="selected">
+                    {{machine['machineName']}}</option>
+                  {% endfor %}
+                </select></p>
+
+              <p><input class="w3-button w3-section w3-aqua" value="Confirm" name="addMachine"
+                  href="{{url_for('machine.addMachine')}}" type="submit" /></p>
+            </form>
           </li>
 
         </ul>
 
+
+
+
       </div>
     </div>
-    
+
+    <div class="w3-col m6 w3-padding-large w3-hide-small" style="position: absolute; top: 10; right: 0;">
+      <div class="w3-card w3-margin">
+        <div class="w3-container w3-padding w3-black">
+          <h2>Machine Gallery</h2>
+        </div>
+  
+        <ul class="w3-ul w3-hoverable">
+          {% for myMachine in myMachines %}
+          <li class="w3-padding-16  w3-center">{{myMachine['machineName']}}<img
+              src="{{url_for('file', filename=myMachine['imageFilename'])}}"></li>
+          <li class="w3-padding-16  w3-center">Description: <p>{{myMachine['description']}}</p>
+          </li>
+
+          <li class="w3-padding-16  w3-center">Nespresso - 
+            <a href="{{myMachine['url']}}">{{myMachine['machineName']}}</a>
+          </li>
+
+          <li class="w3-padding-16  w3-center">Coffee Pods:
+            {% if myMachine['machineType'] == "Origin"%}
+            <p> Origin
+            <img src="{{url_for('file', filename="livanto.png")}}">
+            </p>
+            {% endif %}
+            {% if myMachine['machineType'] == "Vertuo"%}
+            <p> Vertuo
+            <img src="{{url_for('file', filename="vertuo_pod.jpg")}}">
+            </p>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+
+  </div>
+
+  
+
 </div>
+
+
 
 {% endblock%}

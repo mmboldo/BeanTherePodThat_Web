@@ -27,7 +27,6 @@ def myMachine():
         #myMachines = current_user['myMachines']
 
         machines = db.myMachines.find({'email': email})
-        
         return render_template("machine/machine.html", machines = machines)
     return redirect(url_for('login'))
     
@@ -35,9 +34,10 @@ def myMachine():
 
 @bp.route('/add-machine', methods=['GET', 'POST'])
 def addMachine():
+    email = session['email']
     if 'email' in session:
         if request.method == 'POST':
-            email = session['email']
+            
             machineName = request.form['machineName']
             targetMachine = db.coffeeMachines.find_one({'machineName':machineName})
             db.users.update_one({'email':email},{'$addToSet': { 
@@ -63,7 +63,8 @@ def addMachine():
 
     
         machines = db.coffeeMachines.find({})
-        return render_template("machine/add_machine.html", machines=machines)
+        myMachines = db.myMachines.find({'email':email})
+        return render_template("machine/add_machine.html", machines=machines, myMachines=myMachines)
     return redirect(url_for('login'))
 
 
