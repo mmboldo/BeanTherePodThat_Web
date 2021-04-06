@@ -37,9 +37,10 @@ def myMachine():
 def addMachine():
     if 'email' in session:
         if request.method == 'POST':
+            email = session['email']
             machineName = request.form['machineName']
             targetMachine = db.coffeeMachines.find_one({'machineName':machineName})
-            db.users.update_one({'email':session['email']},{'$addToSet': { 
+            db.users.update_one({'email':email},{'$addToSet': { 
                 'myMachines': {
                     'id':targetMachine['_id'],
                     'machineName':targetMachine['machineName'], 
@@ -50,7 +51,7 @@ def addMachine():
                     'description':targetMachine['description']} }},  upsert=False)
             #update myMachine database
             db.myMachines.insert_one({
-                    'email':'travis@gmail.com',
+                    'email':email,
                     'id':targetMachine['_id'],
                     'machineName':targetMachine['machineName'], 
                     'machineType':targetMachine['machineType'], 
@@ -66,7 +67,34 @@ def addMachine():
     return redirect(url_for('login'))
 
 
+@bp.route('remove-machine',methods=['GET','POST'])
+def removeMachine():
+    if 'email' in session:
+        email = session['email']
+        if request.method == 'POST':
+            
+            machineName = request.form['machineName']
+            targetMachine = db.coffeeMachines.find_one({'machineName':machineName})
+            db.users.update_one({'email':email},{'$pull': { 
+                'myMachines': {
+                    'machineName':targetMachine['machineName'], 
+                     }}})
+            #update myMachine database
+            db.myMachines.delete_one({
+                    'email':email,
+                    'id':targetMachine['_id'],
+                    'machineName':targetMachine['machineName'], 
+                    'machineType':targetMachine['machineType'], 
+                    'brand':targetMachine['brand'], 
+                    'imageFilename':targetMachine['imageFilename'], 
+                    'url':targetMachine['url'], 
+                    'description':targetMachine['description']  })
+            return redirect('/machine')
 
+    
+        machines = db.myMachines.find({'email':email})
+        return render_template("machine/remove_machine.html", machines=machines)
+    return redirect(url_for('login'))
 
 
 
